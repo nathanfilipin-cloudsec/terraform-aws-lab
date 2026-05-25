@@ -4,3 +4,6 @@
 terraform.tfvars
 aws/
 awscliv2.zip
+terraform.tfvars
+*.tfvars
+crash.log
