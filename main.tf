@@ -99,7 +99,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   ip_protocol= "tcp"
   to_port= 80
 }
-resource "aws_vpc_security_group_ingress_rule" "ssh_https" {
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   security_group_id = aws_security_group.allow_tls.id
   cidr_ipv4 = var.my_ip
   from_port= 22
