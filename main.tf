@@ -125,6 +125,7 @@ resource "aws_instance" "public_ec2" {
   subnet_id = aws_subnet.subnet1.id #subnet publica
   vpc_security_group_ids = [aws_security_group.allow_tls.id]
   associate_public_ip_address = true
+  key_name = "terraform-lab-key"
   tags = {
     Name = "ec2"
   }
