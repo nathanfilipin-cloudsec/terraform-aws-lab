@@ -70,3 +70,39 @@ resource "aws_route_table_association" "main" {
   route_table_id = aws_route_table.route_table.id
   
 }
+
+resource "aws_security_group" "allow_tls" {
+  name = "allow_tls"
+  description = "Permitir tls traffic"
+  vpc_id = aws_vpc.main-vpc.id
+
+  tags = {
+    Name = "allow_tls"
+  }
+}
+resource "aws_vpc_security_group_egress_rule" "allow_ipv4_traffic" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4 = "0.0.0.0/0"
+  ip_protocol = "-1" #-1, todos os protocols
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_https" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4 = "0.0.0.0/0"
+  from_port= 443
+  ip_protocol= "tcp"
+  to_port= 443
+}
+resource "aws_vpc_security_group_ingress_rule" "allow_http" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4 = "0.0.0.0/0"
+  from_port= 80
+  ip_protocol= "tcp"
+  to_port= 80
+}
+resource "aws_vpc_security_group_ingress_rule" "ssh_https" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4 = var.my_ip
+  from_port= 22
+  ip_protocol= "tcp"
+  to_port= 22
+}
