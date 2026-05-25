@@ -106,3 +106,26 @@ resource "aws_vpc_security_group_ingress_rule" "ssh_https" {
   ip_protocol= "tcp"
   to_port= 22
 }
+data "aws_ami" "ubuntu" {
+most_recent = true
+filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+}
+owners = ["099720109477"]
+}
+
+resource "aws_instance" "public_ec2" {
+  ami = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  subnet_id = aws_subnet.subnet1.id #subnet publica
+  vpc_security_group_ids = [aws_security_group.allow_tls.id]
+  associate_public_ip_address = true
+  tags = {
+    Name = "ec2"
+  }
+}
